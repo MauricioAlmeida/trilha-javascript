@@ -3,24 +3,44 @@
 
   angular.module('jobs').controller('UserController', controller);
 
-  controller.$inject = [];
+  controller.$inject = ['UserService', '$routeParams', 'MessageService'];
 
-  function controller() {
+  function controller(UserService, $routeParams, messageService) {
     const vm = this;
 
-    vm.initUsers = () => {
-      vm.users = [];
+    vm.initForm = () => {
+      let _id = $routeParams.id;
+
+      if(_id) {
+        UserService
+          .getUser(_id)
+          .then((res) => {
+            vm.user = res.data;
+          })
+      }
     };
 
     vm.save = (user) => {
-      vm.users.push(user);
-      vm.user = {};
+      UserService
+        .saveUser(user)
+        .then((res) => {
+          if(!user._id) {
+            user._id = res.data._id;
+          }
+
+          messageService.success(messageService.messages.succesInserted);
+        })
+        .catch((err) => {
+          messageService.error('Erro inesperado');
+        })
     };
 
-    vm.deleteSelected = (users) => {
-      vm.users = users.filter((user) => {
-        return !user.selected
-      });
+    vm.remove = (user) => {
+      UserService
+        .remove(user._id)
+        .then((res) => {
+          vm.user = {};
+        })
     };
   }
 

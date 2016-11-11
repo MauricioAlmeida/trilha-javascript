@@ -1,0 +1,20 @@
+<h3>{{ vm.user._id ? 'Edit' : 'New' }} User</h3>
+
+<form layout="column" layout-padding data-ng-init="vm.initForm()" data-ng-submit="vm.save(vm.user)">
+  <div layout="row" layout-xs="column">
+    <md-input-container flex>
+      <label for="name">Name</label>
+      <input type="text" id="name" data-ng-model="vm.user.name" required>
+    </md-input-container>
+
+    <md-input-container flex>
+      <label for="password">Password</label>
+      <input type="password" id="password" data-ng-model="vm.user.password" required>
+    </md-input-container>
+  </div>
+
+  <div layout="row" layout-align="end center">
+    <md-button type="button" class="md-raised md-warn" data-ng-show="vm.user._id" data-ng-click="vm.remove(vm.user)">Delete</md-button>
+    <md-button type="submit" class="md-primary md-raised">Save</md-button>
+  </div>
+</form>
